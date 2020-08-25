@@ -1,9 +1,6 @@
 import Vue from 'vue';
-import XMain from '@blocks/x-main.vue';
+import XApp from '@blocks/x-app.vue';
 
 new Vue({
-  el: '#root',
-  components: {
-    XMain,
-  },
-});
+  render: h => h(XApp)
+}).$mount('#root');
