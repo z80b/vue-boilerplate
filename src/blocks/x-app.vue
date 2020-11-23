@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import XMain from '@blocks/x-main.vue';
+import XMain from '@b/x-main.vue';
 
 export default {
   components: {

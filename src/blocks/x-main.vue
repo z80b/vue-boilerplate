@@ -4,11 +4,18 @@
     <div :class="$style.body">
       <p v-for="(text, key) in lines" :key="key">{{ text }}</p>
     </div>
+    <x-cat width="252" height="232"/>
   </div>
 </template>
 
 <script>
+import { getProducts } from '@a/products.js';
+import XCat from '@b/x-cat/x-cat.vue';
+
 export default {
+  components: {
+    XCat,
+  },
   props: {
     title: {
       type: String,
@@ -18,6 +25,14 @@ export default {
       type: Array,
       default: () => ([]),
     },
+  },
+  data() {
+    return {
+      products: [],
+    };
+  },
+  async mounted() {
+    this.products = await getProducts();
   },
 };
 </script>

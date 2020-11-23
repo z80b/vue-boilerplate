@@ -27,8 +27,10 @@ const production = !process.env.ROLLUP_WATCH;
 const rollupPlugins = [
   alias({
     entries: [
-      { find: '@', replacement: __dirname + '/src/' },
-      { find: '@blocks', replacement: __dirname + '/src/blocks/' },
+      { find: '@', replacement: __dirname + '/src' },
+      { find: '@c', replacement: __dirname + '/src/components' },
+      { find: '@b', replacement: __dirname + '/src/blocks' },
+      { find: '@a', replacement: __dirname + '/src/api' },
     ]
   }),
 
