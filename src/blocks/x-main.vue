@@ -5,6 +5,7 @@
       <p v-for="(text, key) in lines" :key="key">{{ text }}</p>
     </div>
     <x-cat width="252" height="232"/>
+    <span>{{ `${text}` }}</span>
   </div>
 </template>
 
@@ -29,6 +30,8 @@ export default {
   data() {
     return {
       products: [],
+      test: 3,
+      text: 'привет&nbsp;как&nbsp;дела',
     };
   },
   async mounted() {
@@ -49,5 +52,6 @@ export default {
 .body {
   font-size: 12px;
   color: #888;
+  border-radius: 5px;
 }
 </style>

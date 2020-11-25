@@ -1,4 +1,4 @@
-import { rollup } from 'rollup';
+import { rollup, watch } from 'rollup';
 import alias from '@rollup/plugin-alias';
 import replace from '@rollup/plugin-replace';
 import resolve from '@rollup/plugin-node-resolve';
@@ -9,20 +9,21 @@ import vue from 'rollup-plugin-vue';
 import esbuild from 'rollup-plugin-esbuild';
 import { terser } from 'rollup-plugin-terser';
 
+const [ mode ] = process.argv.slice(2);
+const production = (mode != 'watch');
+
 async function build(plugins) {
   const bundle = await rollup({
     input: 'src/index.js',
     plugins: plugins,
-    treeshake: true,
+    treeshake: production,
   });
   bundle.write({
-    file: 'index.js',
+    file: 'index.min.js',
     format: 'iife',
-    sourcemap: false,
+    sourcemap: !production,
   });
-}
-
-const production = !process.env.ROLLUP_WATCH;
+};
 
 const rollupPlugins = [
   alias({
@@ -34,13 +35,13 @@ const rollupPlugins = [
     ]
   }),
 
-  postcss({
-    plugins: [
-      cssnano(),
-    ],
-    extract: true,
-    output: 'index.css',
-  }),
+  // postcss({
+  //   plugins: [
+  //     cssnano(),
+  //   ],
+  //   extract: true,
+  //   output: production ? 'index.min.css' : 'index.css',
+  // }),
 
   vue({ css: false }),
 
@@ -57,11 +58,52 @@ const rollupPlugins = [
     target: 'es2015',
   }),
 
-  terser({
-    output: {
-      comments: false,
-    },
-  }),
+  // terser({
+  //   output: {
+  //     comments: false,
+  //   },
+  // }),
 ];
 
-build(rollupPlugins);
+const watchOptions = {
+  input: 'src/index.js',
+  output: [{
+    file: 'index.js',
+    format: 'iife',
+    sourcemap: 'inline',
+  }],
+  watch: {
+    exclude: 'node_modules/**',
+    clearScreen: true,
+  },
+  plugins: [...rollupPlugins, postcss({
+    extract: true,
+    output: 'index.css',
+  })],
+};
+
+if (production) {
+  build([
+    ...rollupPlugins,
+    postcss({
+      plugins: [
+        cssnano(),
+      ],
+      extract: true,
+      output: 'index.min.css',
+    }),
+    terser({
+      output: {
+        comments: false,
+      },
+    }),
+  ]);
+} else {
+  const watcher = watch(watchOptions);
+
+  watcher.on('event', event => {
+    console.log(event);
+  });
+
+  watcher.close();
+}

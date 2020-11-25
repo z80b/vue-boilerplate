@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "build": "node -r esm build.js",
+    "watch": "node -r esm build.js watch",
     "dev": "rollup -c -w"
   },
   "dependencies": {

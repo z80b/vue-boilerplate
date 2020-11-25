@@ -5,7 +5,10 @@
       :lines="[
         'dasdads',
         'asdsadsad',
-        'adasd'
+        'adasd',
+        'fwefwefwef',
+        'sadsadsad',
+        'dwqdqwdqwdwq',
       ]"/>
   </div>
 </template>
